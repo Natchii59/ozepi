@@ -1,81 +1,45 @@
-# Turborepo starter
+# Ozepi
 
-This is an official starter Turborepo.
+Ce projet est une monorepo qui regroupe l'ensemble des projets Ozepi.
 
-## Using this example
+## Sommaire
 
-Run the following command:
+1. [Installation](#installation)
+2. [Structure](#structure)
 
-```sh
-npx create-turbo@latest
+## Installation
+
+Pour exécuter ce projet, vous devez avoir la version LTS de Node.js (20.14.0) installé. Nous vous recommandons d'utiliser [NVM](https://github.com/nvm-sh/nvm) pour gérer vos versions de Node.js.
+
+Vous devez également avoir [PNPM](https://pnpm.io/) installé pour gérer les dépendances.
+
+```bash
+# Installer Node.js LTS avec NVM
+$ nvm install 20.14.0 # ou lts
+
+# Utiliser Node.js LTS avec NVM
+$ nvm use 20.14.0 # ou lts
+
+# Installer les dépendances
+$ pnpm install
 ```
 
-## What's inside?
+## Structure
 
-This Turborepo includes the following packages/apps:
+Ce projet est une monorepo géré par [Turborepo](https://turbo.build/repo) et via les workspaces **pnpm**.
 
-### Apps and Packages
+Les projets sont organisés de la manière suivante :
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `packages/`: contient l'ensemble des packages qui peuvent être utilisés dans les applications.
+- `apps/`: contient l'ensemble des applications (API, Frontend, etc.).
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Turbo met à disposition des scripts qui les exécutent dans les différents packages et applications.
 
-### Utilities
+Les commandes sont configurables dans le fichier `turbo.json`, et elles seront exécutable via les commandes **pnpm**.
 
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+```bash
+# Exemple d'exécution d'une commande
+$ pnpm lint
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+Cela va exécuter la commande `lint` dans l'ensemble des packages et applications.
