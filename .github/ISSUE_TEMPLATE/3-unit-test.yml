@@ -1,0 +1,38 @@
+name: Demande d'ajout de tests unitaires
+description: Utilisez ce template pour soumettre une demande d'ajout de tests unitaires.
+title: '[TEST]: '
+labels: ['test']
+projects: ['Natchii59/2']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de remplir ce template pour soumettre votre demande d'ajout de tests unitaires.
+
+  - type: textarea
+    attributes:
+      label: Description
+      description: Décrivez les tests unitaires que vous aimeriez ajouter. (Requis)
+      placeholder: Décrivez les tests unitaires ici...
+
+  - type: textarea
+    attributes:
+      label: Cas de test
+      description: Décrivez les cas de test spécifiques qui seront couverts.
+      placeholder: Décrivez les cas de test spécifiques...
+
+  - type: dropdown
+    attributes:
+      label: Priorité
+      description: Sélectionnez le niveau de priorité de cette demande. (Requis)
+      options:
+        - Basse
+        - Moyenne
+        - Haute
+
+  - type: textarea
+    attributes:
+      label: Autres considérations
+      description: Mentionnez d'autres aspects importants à prendre en compte.
+      placeholder: Autres considérations importantes...

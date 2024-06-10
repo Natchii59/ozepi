@@ -1,0 +1,56 @@
+name: Demande de refactorisation
+description: Utilisez ce template pour soumettre une demande de refactorisation du code.
+title: '[REFACTOR]: '
+labels: ['refactor']
+projects: ['Natchii59/2']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de remplir ce template pour soumettre votre demande de refactorisation du code.
+
+  - type: textarea
+    attributes:
+      label: Description
+      description: Décrivez les parties du code que vous aimeriez refactoriser. (Requis)
+      placeholder: Décrivez les parties du code ici...
+
+  - type: textarea
+    attributes:
+      label: Objectifs
+      description: Expliquez les objectifs de la refactorisation (par exemple, améliorer la lisibilité, optimiser les performances). (Requis)
+      placeholder: Décrivez les objectifs...
+
+  - type: textarea
+    attributes:
+      label: Impact sur le code
+      description: Décrivez les impacts attendus de cette refactorisation sur le code existant.
+      placeholder: Décrivez l'impact sur le code...
+
+  - type: textarea
+    attributes:
+      label: Tests nécessaires
+      description: Indiquez les tests qui devront être effectués pour valider la refactorisation.
+      placeholder: Décrivez les tests nécessaires...
+
+  - type: textarea
+    attributes:
+      label: Risques
+      description: Mentionnez les risques potentiels associés à la refactorisation.
+      placeholder: Décrivez les risques potentiels...
+
+  - type: dropdown
+    attributes:
+      label: Priorité
+      description: Sélectionnez le niveau de priorité de cette demande. (Requis)
+      options:
+        - Basse
+        - Moyenne
+        - Haute
+
+  - type: textarea
+    attributes:
+      label: Autres considérations
+      description: Mentionnez d'autres aspects importants à prendre en compte pour cette refactorisation.
+      placeholder: Autres considérations importantes...

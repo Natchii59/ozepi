@@ -1,0 +1,44 @@
+name: Demande de fonctionnalité
+description: Utilisez ce template pour soumettre une demande de nouvelle fonctionnalité.
+title: '[FEATURE]: '
+labels: ['feature']
+projects: ['Natchii59/2']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de remplir ce template pour soumettre votre demande de fonctionnalité.
+
+  - type: textarea
+    attributes:
+      label: Description
+      description: Décrivez la fonctionnalité que vous aimeriez voir ajoutée. (Requis)
+      placeholder: Décrivez la fonctionnalité ici...
+
+  - type: textarea
+    attributes:
+      label: Tests nécessaires
+      description: Décrivez les tests qui seront nécessaires pour valider cette fonctionnalité.
+      placeholder: Indiquez les tests nécessaires...
+
+  - type: textarea
+    attributes:
+      label: Documentation
+      description: Indiquez les mises à jour de documentation qui seront nécessaires.
+      placeholder: Décrivez les mises à jour de la documentation...
+
+  - type: dropdown
+    attributes:
+      label: Priorité
+      description: Sélectionnez le niveau de priorité de cette demande. (Requis)
+      options:
+        - Basse
+        - Moyenne
+        - Haute
+
+  - type: textarea
+    attributes:
+      label: Autres considérations
+      description: Mentionnez d'autres aspects importants à prendre en compte.
+      placeholder: Autres considérations importantes...

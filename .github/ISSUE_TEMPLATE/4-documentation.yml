@@ -1,0 +1,44 @@
+name: Demande de mise à jour de la documentation
+description: Utilisez ce template pour soumettre une demande d'ajout ou de modification de la documentation.
+title: '[DOC]: '
+labels: ['documentation']
+projects: ['Natchii59/2']
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de remplir ce template pour soumettre votre demande de mise à jour de la documentation.
+
+  - type: textarea
+    attributes:
+      label: Description
+      description: Décrivez les modifications ou ajouts que vous aimeriez apporter à la documentation. (Requis)
+      placeholder: Décrivez les modifications ou ajouts ici...
+
+  - type: textarea
+    attributes:
+      label: Sections concernées
+      description: Listez les sections spécifiques de la documentation qui seront modifiées ou ajoutées. (Requis)
+      placeholder: Indiquez les sections concernées...
+
+  - type: textarea
+    attributes:
+      label: Raisons des modifications
+      description: Expliquez pourquoi ces modifications ou ajouts sont nécessaires. (Requis)
+      placeholder: Expliquez les raisons des modifications...
+
+  - type: dropdown
+    attributes:
+      label: Priorité
+      description: Sélectionnez le niveau de priorité de cette demande. (Requis)
+      options:
+        - Basse
+        - Moyenne
+        - Haute
+
+  - type: textarea
+    attributes:
+      label: Autres considérations
+      description: Mentionnez d'autres aspects importants à prendre en compte pour cette mise à jour de la documentation.
+      placeholder: Autres considérations importantes...
