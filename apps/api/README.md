@@ -1,73 +1,141 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# API (Backend)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Ce projet est une application backend qui utilise NestJS, GraphQL et Prisma.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Sommaire
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. [Installation](#installation)
+2. [Configuration](#configuration)
+3. [Exécution de l'application](#exécution-de-lapplication)
+4. [Compilation de l'application](#compilation-de-lapplication)
+5. [Structure](#structure)
+6. [Linter](#linter)
+7. [Base de données](#base-de-données)
+8. [Contact](#contact)
 
 ## Installation
 
-```bash
-$ pnpm install
-```
-
-## Running the app
+Pour exécuter ce projet, vous devez avoir la version LTS de Node.js (20.14.0) installé.
+Pour l'installation c'est la même qui est précisé dans le README du projet.
 
 ```bash
-# development
-$ pnpm run start
+# Installer Node.js LTS avec NVM
+$ nvm install 20.14.0 # ou lts
 
-# watch mode
-$ pnpm run start:dev
+# Utiliser Node.js LTS avec NVM
+$ nvm use 20.14.0 # ou lts
 
-# production mode
-$ pnpm run start:prod
+# Installer les dépendances
+$ pnpm install # à exécuter à la racine du projet
 ```
 
-## Test
+## Configuration
+
+Copier le fichier `.env.example` et le renommer en `.env`, et remplir les valeurs des variables d'environnement.
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# Copier le fichier .env.example
+$ cp .env.example .env
 ```
 
-## Support
+## Exécution de l'application
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Pour exécuter l'application en mode développement:
+$ pnpm dev
 
-## Stay in touch
+# Pour exécuter l'application en mode debug:
+$ pnpm --filter api run start:debug
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Compilation de l'application
 
-## License
+```bash
+# Pour compiler l'application:
+$ pnpm build
 
-Nest is [MIT licensed](LICENSE).
+# Pour exécuter l'application en mode production:
+$ pnpm --filter api run start:prod
+```
+
+## Structure
+
+Dans la structure du projet, vous trouverez les dossiers suivants :
+
+- `src` : Contient le code source de l'application.
+- `dist` : Contient le code compilé de l'application.
+- `types` : Contient les types de l'application.
+- `prisma` : Contient la configuration et les migrations de Prisma.
+
+Dans le dossier src, vous trouverez les dossiers et fichiers suivants :
+
+- `graphql` : Contient le schéma GraphQL.
+- `common` : Contient les éléments communs à l'application.
+- `app.module.ts` : Contient la configuration de l'application.
+- `main.ts` : Contient le point d'entrée de l'application.
+  et d'autres dossiers qui sont les modules de l'application.
+
+Dans chaque module, vous trouverez les dossiers et fichiers suivants :
+
+- `dto` : Contient les objets de transfert de données du module.
+- `entities` : Contient les entités du module.
+- `guards` : Contient les gardes du module.
+- `strategies` : Contient les stratégies d'authentification du module.
+- `fields` : Contient les resolve fields du module.
+- `xxx.module.ts` : Contient la configuration du module.
+- `xxx.resolver.ts` : Contient les résolveurs (GraphQL) du module.
+- `xxx.service.ts` : Contient les services du module.
+
+## Linter
+
+Le linter ESLint est configuré pour ce projet. Vous pouvez trouver la configuration dans le fichier `.eslintrc.js`.
+Elle est importé du package local `@repo/eslint-config`.
+
+```bash
+# Pour exécuter le linter:
+$ pnpm lint
+```
+
+La vérification du format du code est également exécutée avant de valider les modifications avec les hooks git (`pre-commit`).
+
+## Base de données
+
+La base de données utilisée pour ce projet est PostgreSQL. Vous pouvez trouver la configuration dans le fichier `.env`.
+
+```bash
+# Exemple de configuration de la base de données:
+DATABASE_URL="postgresql://username:password@localhost:5432/database"
+```
+
+Ce projet utilise Prisma pour la gestion de la base de données. Vous pouvez trouver la configuration dans le dossier `prisma`.
+
+```bash
+# Pour générer les migrations:
+$ pnpm --filter api exec prisma migrate dev
+
+# Pour générer les types Prisma:
+$ pnpm --filter api exec prisma generate
+
+# Pour réinitialiser la base de données:
+$ pnpm --filter api exec prisma migrate reset
+
+# Pour ouvrir le studio Prisma:
+$ pnpm --filter api exec prisma studio
+```
+
+Vérifier que vos migrations sont à jour après avoir récupérer du code depuis la branche `master`.
+
+```bash
+# Pour vérifier que vos migrations sont à jour:
+$ pnpm --filter api exec prisma migrate status
+```
+
+La commande pour réinitialiser la base de données est à utiliser avec précaution, car elle supprimera toutes les données de la base de données.
+
+Elle est utile si vous avez besoin de réinitialiser votre base de données en local, mais jamais en production.
+
+Si vous voulez rajouter un champ sur un model existant, veillez à bien le mettre en `nullable` pour éviter les erreurs lors de la migration. Sinon, cela va réinitialiser la base de données lors de la migration.
+
+## Contact
+
+Si vous avez des questions à propos du projet, n'hésitez pas à contacter Nathan.
