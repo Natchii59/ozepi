@@ -3,6 +3,7 @@ import { ApolloDriver } from '@nestjs/apollo'
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { GraphQLModule } from '@nestjs/graphql'
+import { PrismaModule } from 'nestjs-prisma'
 
 import { AppResolver } from './app.resolver'
 import { AppService } from './app.service'
@@ -37,6 +38,9 @@ import type { HttpException } from '@nestjs/common'
 
         return err
       }
+    }),
+    PrismaModule.forRoot({
+      isGlobal: true
     })
   ],
   providers: [AppService, AppResolver]
