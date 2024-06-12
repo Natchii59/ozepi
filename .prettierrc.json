@@ -6,5 +6,16 @@
   "trailingComma": "none",
   "bracketSpacing": true,
   "arrowParens": "avoid",
-  "printWidth": 80
+  "printWidth": 80,
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@/(.*)$",
+    "^[./]",
+    "",
+    "<TYPES>"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"]
 }
