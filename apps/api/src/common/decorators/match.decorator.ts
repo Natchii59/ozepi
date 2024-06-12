@@ -7,7 +7,7 @@ import type { ValidationOptions } from 'class-validator'
 
 export const Match = <T>(
   _type: ClassConstructor<T>,
-  property: (o: T) => unknown,
+  property: keyof T,
   validationOptions?: ValidationOptions
 ) => {
   return (object: object, propertyName: string) => {
@@ -16,7 +16,7 @@ export const Match = <T>(
       propertyName,
       options: validationOptions,
       constraints: [property],
-      validator: MatchConstraint
+      validator: MatchConstraint<T>
     })
   }
 }

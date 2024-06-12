@@ -6,14 +6,15 @@ import type {
 } from 'class-validator'
 
 @ValidatorConstraint({ name: 'match' })
-export class MatchConstraint implements ValidatorConstraintInterface {
+export class MatchConstraint<T> implements ValidatorConstraintInterface {
   validate(value: unknown, args: ValidationArguments): boolean {
-    const [fn] = args.constraints as ((o: unknown) => unknown)[]
-    return fn(args.object) === value
+    const [key] = args.constraints as [keyof T]
+    const object = args.object as T
+    return object[key] === value
   }
 
   defaultMessage(args: ValidationArguments): string {
-    const [constraintProperty] = args.constraints as string[]
-    return `${constraintProperty} and ${args.property} does not match`
+    const [propertyKey] = args.constraints as [keyof T]
+    return `The ${propertyKey.toString()} and ${args.property} fields does not match`
   }
 }

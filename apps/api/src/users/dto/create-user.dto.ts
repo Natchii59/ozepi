@@ -41,8 +41,7 @@ export class CreateUserInput {
     description:
       "The confirmation of the user's password. This field must match the password field."
   })
-  @Match(CreateUserInput, o => o.password, {
-    message: 'The password and password confirmation fields must match',
+  @Match(CreateUserInput, 'password', {
     context: { otherField: 'password' }
   })
   passwordConfirmation: string
