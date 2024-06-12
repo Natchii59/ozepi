@@ -2,6 +2,145 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""Defines the data required to create a new user within the application."""
+input CreateUserInput {
+  """
+  The email of the user. This field must contain a valid email address and be unique within the user table.
+  """
+  email: String!
+
+  """
+  The password of the user. This field must be at least 12 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character.
+  """
+  password: String!
+
+  """
+  The confirmation of the user's password. This field must match the password field.
+  """
+  passwordConfirmation: String!
+}
+
+"""
+A field whose value conforms to the standard cuid format as specified in https://github.com/ericelliott/cuid#broken-down
+"""
+scalar Cuid @specifiedBy(url: "https://github.com/ericelliott/cuid#broken-down")
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""
+A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
+"""
+scalar JWT
+
+"""
+The login input object represents the data required to authenticate a user within the application.
+"""
+input LoginInput {
+  """The email of the user."""
+  email: String!
+
+  """The password of the user."""
+  password: String!
+}
+
+type Mutation {
+  """Create a new user within the application."""
+  createUser(
+    """The data required to create a new user."""
+    input: CreateUserInput!
+  ): User
+
+  """
+  Delete the current user within the application. Requires authentication.
+  """
+  deleteUser: User
+
+  """
+  Authenticate a user using their credentials and return access and refresh tokens.
+  """
+  login(
+    """The data required to authenticate a user within the application."""
+    input: LoginInput!
+  ): Tokens
+
+  """
+  Generate and return a new set of access and refresh tokens using a valid refresh token.
+  """
+  refreshTokens(
+    """The refresh token used to generate a new access token."""
+    refreshToken: JWT!
+  ): Tokens
+
+  """
+  Update the current user within the application. Requires authentication.
+  """
+  updateUser(
+    """The data required to update an existing user."""
+    input: UpdateUserInput!
+  ): User
+}
+
 type Query {
-  hello: String!
+  """Get the current user within the application. Requires authentication."""
+  me: User
+}
+
+"""The Tokens object represents the access and refresh tokens."""
+type Tokens {
+  """The access token used to authenticate requests."""
+  accessToken: JWT!
+
+  """The refresh token used to generate a new access token."""
+  refreshToken: JWT!
+}
+
+"""
+Defines the data required to update an existing user within the application.
+"""
+input UpdateUserInput {
+  """
+  The email of the user. This field must contain a valid email address and be unique within the user table. It is optional and will only be validated if provided.
+  """
+  email: String
+
+  """
+  The name of the user. This field must be between 3 and 255 characters long. It is optional and can be null.
+  """
+  name: String
+
+  """
+  The password of the user. This field must be at least 12 characters long and contain at least one lowercase letter, one uppercase letter, one number, and one special character. It is optional and will only be validated if provided.
+  """
+  password: String
+}
+
+"""The User object represents a registered user within the application."""
+type User {
+  """
+  The creation timestamp of the user account. This field records the exact date and time when the user account was created.
+  """
+  createdAt: DateTime!
+
+  """
+  The email address of the user. This field is used for user authentication and communication purposes.
+  """
+  email: String!
+
+  """
+  The unique identifier (ID) of the user. This is a unique string assigned to each user upon registration and is used for user identification within the application.
+  """
+  id: Cuid!
+
+  """
+  The full name or display name of the user. This field is optional and can be used to store additional identity information of the user.
+  """
+  name: String
+
+  """
+  The last update timestamp of the user account. This field records the most recent date and time when the user's information was modified.
+  """
+  updatedAt: DateTime!
 }
