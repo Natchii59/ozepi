@@ -11,6 +11,7 @@ import { AppAuthGuard } from './auth/guards/app-auth.guard'
 import { CommonModule } from './common/common.module'
 import config from './common/config/config'
 import { UsersModule } from './users/users.module'
+import { WalletsModule } from './wallets/wallets.module'
 
 import type { ApolloDriverConfig } from '@nestjs/apollo'
 import type { HttpException } from '@nestjs/common'
@@ -29,6 +30,7 @@ import type { HttpException } from '@nestjs/common'
       autoSchemaFile: 'src/graphql/schema.gql',
       sortSchema: true,
       introspection: true,
+      fieldResolverEnhancers: ['guards'],
       formatError: err => {
         const originalError = err.extensions?.originalError as
           | HttpException
@@ -49,7 +51,8 @@ import type { HttpException } from '@nestjs/common'
     }),
     CommonModule,
     UsersModule,
-    AuthModule
+    AuthModule,
+    WalletsModule
   ],
   providers: [
     {
