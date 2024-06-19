@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { Prisma, Wallet } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 
@@ -47,14 +47,30 @@ export class WalletsService {
     })
   }
 
-  async update(id: string, input: UpdateWalletInput): Promise<Wallet> {
+  async update(
+    id: string,
+    currentUserId: string,
+    input: UpdateWalletInput
+  ): Promise<Wallet> {
+    const wallet = await this.prisma.wallet.findUnique({
+      where: { id, userId: currentUserId }
+    })
+
+    if (!wallet) throw new NotFoundException('Wallet not found')
+
     return this.prisma.wallet.update({
       where: { id },
       data: input
     })
   }
 
-  async delete(id: string): Promise<Wallet> {
+  async delete(id: string, currentUserId: string): Promise<Wallet> {
+    const wallet = await this.prisma.wallet.findUnique({
+      where: { id, userId: currentUserId }
+    })
+
+    if (!wallet) throw new NotFoundException('Wallet not found')
+
     return this.prisma.wallet.delete({ where: { id } })
   }
 }

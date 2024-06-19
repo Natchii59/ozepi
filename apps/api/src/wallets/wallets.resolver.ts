@@ -1,4 +1,4 @@
-import { NotFoundException, UseGuards } from '@nestjs/common'
+import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { User } from '@prisma/client'
 
@@ -41,14 +41,7 @@ export class WalletsResolver {
     @Args() args: UpdateWalletArgs,
     @CurrentUser() currentUser: User
   ): Promise<Wallet> {
-    const wallet = await this.walletsService.findUnique(
-      { id: args.id },
-      currentUser.id
-    )
-
-    if (!wallet) throw new NotFoundException('Wallet not found')
-
-    return this.walletsService.update(args.id, args.input)
+    return this.walletsService.update(args.id, currentUser.id, args.input)
   }
 
   @UseGuards(GqlAuthGuard)
@@ -60,14 +53,7 @@ export class WalletsResolver {
     @Args() args: DeleteWalletArgs,
     @CurrentUser() currentUser: User
   ): Promise<Wallet> {
-    const wallet = await this.walletsService.findUnique(
-      { id: args.id },
-      currentUser.id
-    )
-
-    if (!wallet) throw new NotFoundException('Wallet not found')
-
-    return this.walletsService.delete(args.id)
+    return this.walletsService.delete(args.id, currentUser.id)
   }
 
   @UseGuards(GqlAuthGuard)
@@ -76,7 +62,7 @@ export class WalletsResolver {
     name: 'wallet',
     description: 'Retrieves a wallet by its ID of the authenticated user.'
   })
-  async getWallet(
+  async findUniqueWallet(
     @Args() args: FindUniqueWalletArgs,
     @CurrentUser() currentUser: User
   ): Promise<Wallet | null> {
@@ -85,9 +71,10 @@ export class WalletsResolver {
 
   @UseGuards(GqlAuthGuard)
   @Query(() => WalletPagination, {
+    name: 'wallets',
     description: 'Retrieves all wallets of the authenticated user.'
   })
-  wallets(@Args() _args: FindManyWalletArgs): boolean {
+  findManyWallet(@Args() _args: FindManyWalletArgs): boolean {
     return true
   }
 }
