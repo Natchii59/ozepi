@@ -1,5 +1,7 @@
 node_modules
 .turbo
 dist
+.expo
+expo-env.d.ts
 pnpm-lock.yaml
 *.gql
