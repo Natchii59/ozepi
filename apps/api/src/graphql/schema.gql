@@ -21,14 +21,136 @@ input CreateUserInput {
 }
 
 """
+Defines the data required to create a new wallet within the application.
+"""
+input CreateWalletInput {
+  """The currency that the wallet will use."""
+  currency: Currencies!
+
+  """The balance of the wallet. Defaults to 0."""
+  currentBalance: Float
+
+  """
+  The name of the wallet. This field must be unique within the wallet table.
+  """
+  name: String!
+}
+
+"""
 A field whose value conforms to the standard cuid format as specified in https://github.com/ericelliott/cuid#broken-down
 """
 scalar Cuid @specifiedBy(url: "https://github.com/ericelliott/cuid#broken-down")
+
+"""The available currencies that can be used within the application."""
+enum Currencies {
+  EUR
+  GBP
+  JPY
+  RUB
+  USD
+}
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+"""
+Defines the criteria for filtering results based on floating-point values.
+"""
+input DateTimeFilter {
+  """
+  Filters results to only include those that match this exact date or date string.
+  """
+  equals: DateTime
+
+  """
+  Filters results to only include those that are later than the specified date or date string.
+  """
+  gt: DateTime
+
+  """
+  Filters results to only include those that are later than or equal to the specified date or date string.
+  """
+  gte: DateTime
+
+  """
+  Filters results to only include those that match any of the specified dates or date strings.
+  """
+  in: [DateTime!]
+
+  """
+  Filters results to only include those that are earlier than the specified date or date string.
+  """
+  lt: DateTime
+
+  """
+  Filters results to only include those that are earlier than or equal to the specified date or date string.
+  """
+  lte: DateTime
+
+  """Allows for nested date filtering, applying additional filter criteria."""
+  not: DateTimeFilter
+
+  """
+  Filters results to exclude those that match any of the specified dates or date strings.
+  """
+  notIn: [DateTime!]
+}
+
+input EnumCurrenciesFilter {
+  """Checks for equality with the specified value."""
+  equals: Currencies
+
+  """Checks for equality with the specified values."""
+  in: [Currencies!]
+
+  """Negates the specified condition."""
+  not: EnumCurrenciesFilter
+
+  """Checks for inequality with the specified values."""
+  notIn: [Currencies!]
+}
+
+input FloatFilter {
+  """Filters results to only include those that match this exact float."""
+  equals: Float
+
+  """
+  Filters results to only include those that are greater than the specified float.
+  """
+  gt: Float
+
+  """
+  Filters results to only include those that are greater than or equal to the specified float.
+  """
+  gte: Float
+
+  """
+  Filters results to only include those that match any of the specified floats.
+  """
+  in: [Float!]
+
+  """
+  Filters results to only include those that are less than the specified float.
+  """
+  lt: Float
+
+  """
+  Filters results to only include those that are less than or equal to the specified float.
+  """
+  lte: Float
+
+  """
+  Allows for nested float filtering, applying additional filter criteria.
+  """
+  not: FloatFilter
+
+  """
+  Filters results to exclude those that match any of the specified floats.
+  """
+  notIn: [Float!]
+}
 
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
@@ -53,10 +175,22 @@ type Mutation {
     input: CreateUserInput!
   ): User
 
+  """Creates a new wallet for the authenticated user."""
+  createWallet(
+    """The data required to create a new wallet."""
+    input: CreateWalletInput!
+  ): Wallet
+
   """
   Delete the current user within the application. Requires authentication.
   """
   deleteUser: User
+
+  """Delete an existing wallet of the authenticated user."""
+  deleteWallet(
+    """The ID of the wallet to delete."""
+    id: Cuid!
+  ): Wallet
 
   """
   Authenticate a user using their credentials and return access and refresh tokens.
@@ -81,11 +215,114 @@ type Mutation {
     """The data required to update an existing user."""
     input: UpdateUserInput!
   ): User
+
+  """Update an existing wallet of the authenticated user."""
+  updateWallet(
+    """The ID of the wallet to update."""
+    id: Cuid!
+
+    """The data required to update an existing wallet."""
+    input: UpdateWalletInput!
+  ): Wallet
 }
 
 type Query {
   """Get the current user within the application. Requires authentication."""
   me: User
+
+  """Retrieves a wallet by its ID of the authenticated user."""
+  wallet(
+    """The ID of the wallet to retrieve."""
+    id: Cuid!
+  ): Wallet
+
+  """Retrieves all wallets of the authenticated user."""
+  wallets(
+    """The order in which to sort the fetched wallets."""
+    orderBy: [WalletOrderByInput!]
+
+    """
+    The number of wallets to skip before starting to collect the result set.
+    """
+    skip: Int
+
+    """
+    The number of wallets to fetch. If not specified, all matcing wallets will be fetched.
+    """
+    take: Int
+
+    """Filter criteria to determine which wallets to fetch."""
+    where: WalletWhereInput
+  ): WalletPagination!
+}
+
+"""
+Defines the mode for filtering strings, either default or case-insensitive.
+"""
+enum QueryMode {
+  default
+  insensitive
+}
+
+"""Specifies the order of sorting: ascending (asc) or descending (desc)."""
+enum SortOrder {
+  asc
+  desc
+}
+
+"""Defines the criteria for filtering results based on string values."""
+input StringFilter {
+  """Filters results to include those that contain the specified substring."""
+  contains: String
+
+  """Filters results to include those that end with the specified string."""
+  endsWith: String
+
+  """Filters results to only include those that match this exact string."""
+  equals: String
+
+  """
+  Filters results to only include those that are greater than the specified string.
+  """
+  gt: String
+
+  """
+  Filters results to only include those that are greater than or equal to the specified string.
+  """
+  gte: String
+
+  """
+  Filters results to only include those that match any of the specified strings.
+  """
+  in: [String!]
+
+  """
+  Filters results to only include those that are less than the specified string.
+  """
+  lt: String
+
+  """
+  Filters results to only include those that are less than or equal to the specified string.
+  """
+  lte: String
+
+  """
+  Defines the mode for filtering strings, either default or case-insensitive.
+  """
+  mode: QueryMode
+
+  """
+  Allows for nested string filtering, applying additional filter criteria.
+  """
+  not: StringFilter
+
+  """
+  Filters results to exclude those that match any of the specified strings.
+  """
+  notIn: [String!]
+
+  """Filters results to include those that start with the specified string."""
+  startsWith: String
 }
 
 """The Tokens object represents the access and refresh tokens."""
@@ -117,6 +354,16 @@ input UpdateUserInput {
   password: String
 }
 
+"""
+Defines the data required to update an existing wallet within the application.
+"""
+input UpdateWalletInput {
+  """
+  The name of the wallet. This field must be unique within the wallet table. It is optional and will only be validated if provided.
+  """
+  name: String
+}
+
 """The User object represents a registered user within the application."""
 type User {
   """
@@ -143,4 +390,124 @@ type User {
   The last update timestamp of the user account. This field records the most recent date and time when the user's information was modified.
   """
   updatedAt: DateTime!
+}
+
+"""
+The Wallet object represents a registered wallet within the application.
+"""
+type Wallet {
+  """
+  The creation timestamp of the wallet. This field records the exact date and time when the wallet was created.
+  """
+  createdAt: DateTime!
+
+  """The currency that the wallet will use."""
+  currency: Currencies!
+
+  """The currency that the wallet will use."""
+  currentBalance: Float!
+
+  """
+  The unique identifier (ID) of the wallet. This is a unique string assigned to each wallet upon creation and is used for wallet identification within the application.
+  """
+  id: Cuid!
+
+  """
+  The name of the wallet. This field must be unique within the wallet table.
+  """
+  name: String!
+
+  """
+  The last update timestamp of the wallet. This field records the most recent date and time when the wallet's information was modified.
+  """
+  updatedAt: DateTime!
+
+  """
+  The unique identifier (ID) of the user who owns the wallet. This is a unique string assigned to each user upon registration and is used for user identification within the application.
+  """
+  userId: Cuid!
+}
+
+"""
+The wallet order input object represents the criteria by which to sort wallets.
+"""
+input WalletOrderByInput {
+  """
+  The order in which to sort the wallet by the date and time they were created.
+  """
+  createdAt: SortOrder
+
+  """The order in which to sort the wallet by their currency."""
+  currency: SortOrder
+
+  """The order in which to sort the wallet by their current balance."""
+  currentBalance: SortOrder
+
+  """The order in which to sort the wallet by their ID."""
+  id: SortOrder
+
+  """The order in which to sort the wallet by their name."""
+  name: SortOrder
+
+  """
+  The order in which to sort the wallet by the date and time they were last updated.
+  """
+  updatedAt: SortOrder
+}
+
+"""
+Tge WalletPagination object represents a paginated list of wallets within the application.
+"""
+type WalletPagination {
+  """
+  Retrieve a list of wallets within the application. This field returns an array of wallets based on the provided query arguments.
+  """
+  nodes: [Wallet!]!
+
+  """
+  Retrieve the total count of wallets within the application. This field returns the total number of wallets based on the provided query arguments.
+  """
+  totalCount: Int!
+}
+
+"""
+The wallet where input object represents the criteria for filtering wallets.
+"""
+input WalletWhereInput {
+  """
+  A list of conditions that must all be true (logical AND) for the wallet to be included in the results.
+  """
+  AND: [WalletWhereInput!]
+
+  """
+  A list of conditions that must all be false (logical NOT) for the wallet to be included in the results.
+  """
+  NOT: [WalletWhereInput!]
+
+  """
+  A list of conditions where at least one must be true (logical OR) for the wallet to be included in the results.
+  """
+  OR: [WalletWhereInput!]
+
+  """
+  A filter to apply to the createdAt field, filtering by the date and time the wallet was created.
+  """
+  createdAt: DateTimeFilter
+
+  """A filter to apply to the wallet currency field."""
+  currency: EnumCurrenciesFilter
+
+  """A filter to apply to the wallet current balance field."""
+  currentBalance: FloatFilter
+
+  """A filter to apply to the wallet ID field."""
+  id: StringFilter
+
+  """A filter to apply to the wallet name field."""
+  name: StringFilter
+
+  """
+  A filter to apply to the updatedAt field, filtering by the date and time the wallet was last updated.
+  """
+  updatedAt: DateTimeFilter
 }
