@@ -138,6 +138,9 @@ importers:
 
   apps/application:
     dependencies:
+      '@babel/runtime':
+        specifier: ^7.24.7
+        version: 7.24.7
       '@expo/vector-icons':
         specifier: ^14.0.2
         version: 14.0.2
@@ -1121,6 +1124,10 @@ packages:
 
   '@babel/runtime@7.23.2':
     resolution: {integrity: sha512-mM8eg4yl5D6i3lu2QKPuPH4FArvJ8KhTofbE7jwMUv9KX5mBvwPAqnV3MlyBNqdp9RyRKP6Yck8TrfYrPvX3bg==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.24.7':
+    resolution: {integrity: sha512-UwgBRMjJP+xv857DCngvqXI3Iq6J4v0wXmwc6sapg+zyhbwmQX67LUEFrkK5tbyJ30jGuG3ZvWpBiB9LCy1kWw==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.24.7':
@@ -8218,6 +8225,10 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.0
 
+  '@babel/runtime@7.24.7':
+    dependencies:
+      regenerator-runtime: 0.14.0
+
   '@babel/template@7.24.7':
     dependencies:
       '@babel/code-frame': 7.24.7
@@ -8402,7 +8413,7 @@ snapshots:
 
   '@expo/cli@0.18.19(expo-modules-autolinking@1.11.1)':
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       '@expo/code-signing-certificates': 0.0.5
       '@expo/config': 9.0.2
       '@expo/config-plugins': 8.0.5
@@ -9290,12 +9301,12 @@ snapshots:
 
   '@radix-ui/react-compose-refs@1.0.0(react@18.2.0)':
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       react: 18.2.0
 
   '@radix-ui/react-slot@1.0.1(react@18.2.0)':
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       '@radix-ui/react-compose-refs': 1.0.0(react@18.2.0)
       react: 18.2.0
 
@@ -11893,7 +11904,7 @@ snapshots:
 
   expo@51.0.14(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7)):
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       '@expo/cli': 0.18.19(expo-modules-autolinking@1.11.1)
       '@expo/config': 9.0.1
       '@expo/config-plugins': 8.0.5
@@ -13607,7 +13618,7 @@ snapshots:
 
   metro-runtime@0.80.9:
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
 
   metro-source-map@0.80.9:
     dependencies:
@@ -14390,7 +14401,7 @@ snapshots:
 
   react-native-web@0.19.12(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
       '@react-native/normalize-colors': 0.74.84
       fbjs: 3.0.5
       inline-style-prefixer: 6.0.4
