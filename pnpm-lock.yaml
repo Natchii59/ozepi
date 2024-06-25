@@ -14545,7 +14545,7 @@ snapshots:
 
   regenerator-transform@0.15.2:
     dependencies:
-      '@babel/runtime': 7.23.2
+      '@babel/runtime': 7.24.7
 
   regexp-tree@0.1.27: {}
 
