@@ -2,6 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+Defines the data required to create a new transaction within the application.
+"""
+input CreateTransactionInput {
+  """The amount of the transaction."""
+  amount: Float!
+
+  """The date of the transaction."""
+  date: DateTime!
+
+  """The title of the transaction."""
+  title: String!
+
+  """The type of transaction."""
+  type: TransactionType!
+
+  """The wallet ID that the transaction belongs to."""
+  walletId: Cuid!
+}
+
 """Defines the data required to create a new user within the application."""
 input CreateUserInput {
   """
@@ -112,6 +132,20 @@ input EnumCurrenciesFilter {
   notIn: [Currencies!]
 }
 
+input EnumTransactionTypeFilter {
+  """Checks for equality with the specified value."""
+  equals: TransactionType
+
+  """Checks for equality with the specified values."""
+  in: [TransactionType!]
+
+  """Negates the specified condition."""
+  not: EnumTransactionTypeFilter
+
+  """Checks for inequality with the specified values."""
+  notIn: [TransactionType!]
+}
+
 input FloatFilter {
   """Filters results to only include those that match this exact float."""
   equals: Float
@@ -169,6 +203,12 @@ input LoginInput {
 }
 
 type Mutation {
+  """Create a new transaction within the application."""
+  createTransaction(
+    """The data required to create a new transaction."""
+    input: CreateTransactionInput!
+  ): Transaction!
+
   """Create a new user within the application."""
   createUser(
     """The data required to create a new user."""
@@ -180,6 +220,12 @@ type Mutation {
     """The data required to create a new wallet."""
     input: CreateWalletInput!
   ): Wallet
+
+  """Delete an existing transaction within the application."""
+  deleteTransaction(
+    """The ID of the transaction to delete."""
+    id: Cuid!
+  ): Transaction!
 
   """
   Delete the current user within the application. Requires authentication.
@@ -208,6 +254,15 @@ type Mutation {
     refreshToken: JWT!
   ): Tokens
 
+  """Update an existing transaction within the application."""
+  updateTransaction(
+    """The ID of the transaction to update."""
+    id: Cuid!
+
+    """The data required to update an existing transaction."""
+    input: UpdateTransactionInput!
+  ): Transaction!
+
   """
   Update the current user within the application. Requires authentication.
   """
@@ -229,6 +284,31 @@ type Mutation {
 type Query {
   """Get the current user within the application. Requires authentication."""
   me: User
+
+  """Retrieve a single transaction within the application."""
+  transaction(
+    """The ID of the transaction to retrieve."""
+    id: Cuid!
+  ): Transaction
+
+  """Retrieve multiple transactions within the application."""
+  transactions(
+    """The order in which to sort the fetched transactions."""
+    orderBy: [TransactionOrderByInput!]
+
+    """
+    The number of transactions to skip before starting to collect the result set.
+    """
+    skip: Int
+
+    """
+    The number of transactions to fetch. If not specified, all matcing transactions will be fetched.
+    """
+    take: Int
+
+    """Filter criteria to determine which transactions to fetch."""
+    where: TransactionWhereInput
+  ): TransactionPagination
 
   """Retrieves a wallet by its ID of the authenticated user."""
   wallet(
@@ -332,6 +412,161 @@ type Tokens {
 
   """The refresh token used to generate a new access token."""
   refreshToken: JWT!
+}
+
+"""
+The Transaction object represents a registered transaction within the application.
+"""
+type Transaction {
+  """
+  The amount of the transaction. This field represents the monetary value of the transaction.
+  """
+  amount: Float!
+
+  """
+  The creation timestamp of the transaction. This field records the exact date and time when the transaction was created.
+  """
+  createdAt: DateTime!
+
+  """
+  The date of the transaction. This field records the exact date when the transaction occurred.
+  """
+  date: DateTime!
+
+  """
+  The unique identifier (ID) of the transaction. This is a unique string assigned to each transaction upon creation and is used for transaction identification within the application.
+  """
+  id: Cuid!
+
+  """
+  The title of the transaction. This field is used to describe the purpose of the transaction.
+  """
+  title: String!
+
+  """
+  The type of the transaction. This field categorizes the transaction as either an income or an expense.
+  """
+  type: TransactionType!
+
+  """
+  The last update timestamp of the transaction. This field records the most recent date and time when the transaction's information was modified.
+  """
+  updatedAt: DateTime!
+
+  """
+  The unique identifier (ID) of the wallet associated with the transaction. This is a unique string assigned to each wallet upon creation and is used for wallet identification within the application.
+  """
+  walletId: Cuid!
+}
+
+input TransactionOrderByInput {
+  """The order in which to sort the fetched transactions by their amount."""
+  amount: SortOrder
+
+  """
+  The order in which to sort the fetched transactions by the date and time they were created.
+  """
+  createdAt: SortOrder
+
+  """The order in which to sort the fetched transactions by their date."""
+  date: SortOrder
+
+  """The direction in which to sort the fetched transactions."""
+  id: SortOrder
+
+  """The order in which to sort the fetched transactions by their title."""
+  title: SortOrder
+
+  """The order in which to sort the fetched transactions by their type."""
+  type: SortOrder
+
+  """
+  The order in which to sort the fetched transactions by the date and time they were last updated.
+  """
+  updatedAt: SortOrder
+}
+
+"""
+The TransactionPagination object represents a paginated list of transactions within the application.
+"""
+type TransactionPagination {
+  """
+  Retrieve a list of transactions within the application. This field returns an array of transactions based on the provided query arguments.
+  """
+  nodes: [Transaction!]!
+
+  """
+  Retrieve the total count of transactions within the application. This field returns the total number of transactions based on the provided query arguments.
+  """
+  totalCount: Int!
+}
+
+"""The transaction type that can be used within the application."""
+enum TransactionType {
+  EXPENSE
+  INCOME
+}
+
+"""
+The transaction where input object represents the criteria for filtering transactions.
+"""
+input TransactionWhereInput {
+  """
+  A list of conditions that must all be true (logical AND) for the transaction to be included in the results.
+  """
+  AND: [TransactionWhereInput!]
+
+  """
+  A list of conditions that must all be false (logical NOT) for the transaction to be included in the results.
+  """
+  NOT: [TransactionWhereInput!]
+
+  """
+  A list of conditions where at least one must be true (logical OR) for the transaction to be included in the results.
+  """
+  OR: [TransactionWhereInput!]
+
+  """A filter to apply to the transaction amount field."""
+  amount: FloatFilter
+
+  """
+  A filter to apply to the createdAt field, filtering by the date and time the transaction was created.
+  """
+  createdAt: DateTimeFilter
+
+  """A filter to apply to the transaction date field."""
+  date: DateTimeFilter
+
+  """A filter to apply to the transaction ID field."""
+  id: StringFilter
+
+  """A filter to apply to the transaction title field."""
+  title: StringFilter
+
+  """A filter to apply to the transaction type field."""
+  type: EnumTransactionTypeFilter
+
+  """
+  A filter to apply to the updatedAt field, filtering by the date and time the transaction was last updated.
+  """
+  updatedAt: DateTimeFilter
+
+  """A filter to apply to the wallet ID field."""
+  walletId: StringFilter
+}
+
+"""
+Defines the data required to update an existing transaction within the application.
+"""
+input UpdateTransactionInput {
+  """The amount of the transaction."""
+  amount: Float
+
+  """The date of the transaction."""
+  date: DateTime
+
+  """The title of the transaction."""
+  title: String
 }
 
 """
@@ -456,7 +691,7 @@ input WalletOrderByInput {
 }
 
 """
-Tge WalletPagination object represents a paginated list of wallets within the application.
+The WalletPagination object represents a paginated list of wallets within the application.
 """
 type WalletPagination {
   """
