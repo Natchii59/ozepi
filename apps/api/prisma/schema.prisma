@@ -35,10 +35,11 @@ model User {
 }
 
 model Wallet {
-  id             String     @id @default(cuid())
-  name           String
-  currency       Currencies
-  currentBalance Float      @default(0) @map("current_balance")
+  id                    String     @id @default(cuid())
+  name                  String
+  currency              Currencies
+  currentBalance        Float      @default(0) @map("current_balance")
+  hasFutureTransactions Boolean    @default(false) @map("has_future_transactions")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

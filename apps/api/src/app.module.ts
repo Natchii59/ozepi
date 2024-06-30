@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { GraphQLModule } from '@nestjs/graphql'
+import { ScheduleModule } from '@nestjs/schedule'
 import { PrismaModule } from 'nestjs-prisma'
 
 import { AuthModule } from './auth/auth.module'
@@ -50,6 +51,7 @@ import type { HttpException } from '@nestjs/common'
     PrismaModule.forRoot({
       isGlobal: true
     }),
+    ScheduleModule.forRoot(),
     CommonModule,
     UsersModule,
     AuthModule,

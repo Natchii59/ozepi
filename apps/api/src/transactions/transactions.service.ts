@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { Prisma, Transaction } from '@prisma/client'
+import { differenceInDays, startOfDay, startOfToday } from 'date-fns'
 import { PrismaService } from 'nestjs-prisma'
 
 import { CreateTransactionInput } from './dto/create-transaction.dto'
@@ -19,17 +20,18 @@ export class TransactionsService {
 
     if (!wallet) throw new NotFoundException('Wallet not found')
 
-    const [transaction] = await this.prisma.$transaction([
-      this.prisma.transaction.create({
+    return this.prisma.$transaction(async tx => {
+      const transaction = await tx.transaction.create({
         data: {
           title: input.title,
           amount: input.amount,
-          date: input.date,
+          date: startOfDay(input.date),
           type: input.type,
           walletId: input.walletId
         }
-      }),
-      this.prisma.wallet.update({
+      })
+
+      await tx.wallet.update({
         where: { id: input.walletId },
         data: {
           currentBalance:
@@ -38,9 +40,17 @@ export class TransactionsService {
               : wallet.currentBalance - input.amount
         }
       })
-    ])
 
-    return transaction
+      const isInFuture = differenceInDays(startOfToday(), input.date) < 0
+      if (isInFuture) {
+        await tx.wallet.update({
+          where: { id: input.walletId },
+          data: { hasFutureTransactions: true }
+        })
+      }
+
+      return transaction
+    })
   }
 
   async update(
@@ -59,20 +69,48 @@ export class TransactionsService {
       input.amount !== undefined ? input.amount - transaction.amount : 0
     const newCurrentBalance = transaction.wallet.currentBalance + difference
 
-    const [updatedTransaction] = await this.prisma.$transaction([
-      this.prisma.transaction.update({
+    const newDate = input.date ? startOfDay(input.date) : transaction.date
+
+    return this.prisma.$transaction(async tx => {
+      const updatedTransaction = await tx.transaction.update({
         where: { id },
-        data: input
-      }),
-      this.prisma.wallet.update({
-        where: { id: transaction.walletId },
+        data: {
+          ...input,
+          date: newDate
+        }
+      })
+
+      await tx.wallet.update({
+        where: { id: updatedTransaction.walletId },
         data: {
           currentBalance: newCurrentBalance
         }
       })
-    ])
 
-    return updatedTransaction
+      if (input.date) {
+        const isInFuture = differenceInDays(startOfToday(), input.date) < 0
+
+        if (isInFuture) {
+          await tx.wallet.update({
+            where: { id: updatedTransaction.walletId },
+            data: { hasFutureTransactions: true }
+          })
+        } else {
+          const hasFutureTransactions = await this.hasFutureTransactions(
+            updatedTransaction.walletId
+          )
+
+          if (!hasFutureTransactions) {
+            await tx.wallet.update({
+              where: { id: updatedTransaction.walletId },
+              data: { hasFutureTransactions: false }
+            })
+          }
+        }
+      }
+
+      return updatedTransaction
+    })
   }
 
   async delete(id: string, currentUserId: string): Promise<Transaction> {
@@ -83,11 +121,12 @@ export class TransactionsService {
 
     if (!transaction) throw new NotFoundException('Transaction not found')
 
-    const [deletedTransaction] = await this.prisma.$transaction([
-      this.prisma.transaction.delete({
+    return this.prisma.$transaction(async tx => {
+      const deletedTransaction = await tx.transaction.delete({
         where: { id }
-      }),
-      this.prisma.wallet.update({
+      })
+
+      await tx.wallet.update({
         where: { id: transaction.walletId },
         data: {
           currentBalance:
@@ -96,9 +135,23 @@ export class TransactionsService {
               : transaction.wallet.currentBalance + transaction.amount
         }
       })
-    ])
 
-    return deletedTransaction
+      const isInFuture = differenceInDays(startOfToday(), transaction.date) < 0
+      if (isInFuture) {
+        const hasFutureTransactions = await this.hasFutureTransactions(
+          transaction.walletId
+        )
+
+        if (!hasFutureTransactions) {
+          await tx.wallet.update({
+            where: { id: transaction.walletId },
+            data: { hasFutureTransactions: false }
+          })
+        }
+      }
+
+      return deletedTransaction
+    })
   }
 
   async findUnique(
@@ -134,5 +187,18 @@ export class TransactionsService {
         AND: [{ ...where }, { wallet: { userId: currentUserId } }]
       }
     })
+  }
+
+  async hasFutureTransactions(walletId: string): Promise<boolean> {
+    const today = startOfToday()
+
+    const count = await this.prisma.transaction.count({
+      where: {
+        walletId,
+        date: { gt: today }
+      }
+    })
+
+    return count > 0
   }
 }
