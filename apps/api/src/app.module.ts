@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module'
 import { AppAuthGuard } from './auth/guards/app-auth.guard'
 import { CommonModule } from './common/common.module'
 import config from './common/config/config'
+import { TransactionsModule } from './transactions/transactions.module'
 import { UsersModule } from './users/users.module'
 import { WalletsModule } from './wallets/wallets.module'
 
@@ -52,7 +53,8 @@ import type { HttpException } from '@nestjs/common'
     CommonModule,
     UsersModule,
     AuthModule,
-    WalletsModule
+    WalletsModule,
+    TransactionsModule
   ],
   providers: [
     {

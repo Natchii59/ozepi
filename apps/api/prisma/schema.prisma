@@ -15,6 +15,11 @@ enum Currencies {
   RUB
 }
 
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
 model User {
   id       String  @id @default(cuid())
   email    String  @unique
@@ -41,5 +46,23 @@ model Wallet {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
+  transactions Transaction[]
+
   @@map("wallet")
+}
+
+model Transaction {
+  id     String          @id @default(cuid())
+  title  String
+  amount Float
+  date   DateTime
+  type   TransactionType
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  walletId String @map("wallet_id")
+
+  @@map("transaction")
 }
