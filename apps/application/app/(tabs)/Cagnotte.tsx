@@ -1,10 +1,10 @@
 import React from 'react'
 import { SafeAreaView, Text } from 'react-native'
 
-export default function HomeScreen() {
+export default function CagnotteScreen() {
   return (
     <SafeAreaView>
-      <Text>Acceuil</Text>
+      <Text>Cagnottes</Text>
     </SafeAreaView>
   )
 }
