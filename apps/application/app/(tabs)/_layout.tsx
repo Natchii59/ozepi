@@ -10,7 +10,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="Index"
         options={{
           title: 'Acceuil',
           tabBarIcon: ({ color, focused }) => (
@@ -28,18 +28,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Caisse_Comune"
+        name="CaisseCommune"
         options={{
-          title: 'Caisse Comune',
+          title: 'Caisse Commune',
           tabBarIcon: ({ color, focused }) => (
             focused ? <RectangleGroupIconSolid color={color} /> : <RectangleGroupIconOutline color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="Paramettre"
+        name="Parametre"
         options={{
-          title: 'Paramettre',
+          title: 'Parametre',
           tabBarIcon: ({ color, focused }) => (
             focused ? <CogIconSolid color={color} /> : <CogIconOutline color={color} />
           ),

@@ -1,10 +1,10 @@
 import React from 'react'
 import { SafeAreaView, Text } from 'react-native'
 
-export default function AboutScreen() {
+export default function CaisseCommuneScreen() {
   return (
     <SafeAreaView>
-      <Text>About</Text>
+      <Text>Caisse Commune</Text>
     </SafeAreaView>
   )
 }
