@@ -15,6 +15,18 @@ enum Currencies {
   RUB
 }
 
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
 model User {
   id       String  @id @default(cuid())
   email    String  @unique
@@ -30,10 +42,11 @@ model User {
 }
 
 model Wallet {
-  id             String     @id @default(cuid())
-  name           String
-  currency       Currencies
-  currentBalance Float      @default(0) @map("current_balance")
+  id                    String     @id @default(cuid())
+  name                  String
+  currency              Currencies
+  currentBalance        Float      @default(0) @map("current_balance")
+  hasFutureTransactions Boolean    @default(false) @map("has_future_transactions")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -41,5 +54,43 @@ model Wallet {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
+  transactions          Transaction[]
+  recurringTransactions RecurringTransaction[]
+
   @@map("wallet")
+}
+
+model Transaction {
+  id     String          @id @default(cuid())
+  title  String
+  amount Float
+  date   DateTime
+  type   TransactionType
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  walletId String @map("wallet_id")
+
+  @@map("transaction")
+}
+
+model RecurringTransaction {
+  id         String          @id @default(cuid())
+  title      String
+  amount     Float
+  type       TransactionType
+  frequency  Frequency
+  dayOfWeek  Int?            @map("day_of_week")
+  dayOfMonth Int?            @map("day_of_month")
+  month      Int?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  walletId String @map("wallet_id")
+
+  @@map("recurring_transaction")
 }
