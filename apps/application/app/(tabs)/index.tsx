@@ -6,5 +6,8 @@ export default function HomeScreen() {
     <SafeAreaView>
       <Text >Home</Text>
     </SafeAreaView>
+
+
   )
 }
+
