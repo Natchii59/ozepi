@@ -2,6 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateRecurringTransactionInput {
+  amount: Float!
+  dayOfMonth: Int
+  dayOfWeek: Int
+  frequency: Frequency!
+  month: Int
+  title: String!
+  type: TransactionType!
+  walletId: Cuid!
+}
+
+"""
+Defines the data required to create a new transaction within the application.
+"""
+input CreateTransactionInput {
+  """The amount of the transaction."""
+  amount: Float!
+
+  """The date of the transaction."""
+  date: DateTime!
+
+  """The title of the transaction."""
+  title: String!
+
+  """The type of transaction."""
+  type: TransactionType!
+
+  """The wallet ID that the transaction belongs to."""
+  walletId: Cuid!
+}
+
 """Defines the data required to create a new user within the application."""
 input CreateUserInput {
   """
@@ -112,6 +143,34 @@ input EnumCurrenciesFilter {
   notIn: [Currencies!]
 }
 
+input EnumFrequencyFilter {
+  """Checks for equality with the specified value."""
+  equals: Frequency
+
+  """Checks for equality with the specified values."""
+  in: [Frequency!]
+
+  """Negates the specified condition."""
+  not: EnumFrequencyFilter
+
+  """Checks for inequality with the specified values."""
+  notIn: [Frequency!]
+}
+
+input EnumTransactionTypeFilter {
+  """Checks for equality with the specified value."""
+  equals: TransactionType
+
+  """Checks for equality with the specified values."""
+  in: [TransactionType!]
+
+  """Negates the specified condition."""
+  not: EnumTransactionTypeFilter
+
+  """Checks for inequality with the specified values."""
+  notIn: [TransactionType!]
+}
+
 input FloatFilter {
   """Filters results to only include those that match this exact float."""
   equals: Float
@@ -152,6 +211,55 @@ input FloatFilter {
   notIn: [Float!]
 }
 
+"""The frequency that can be used within the application."""
+enum Frequency {
+  DAILY
+  MONTHLY
+  WEEKLY
+  YEARLY
+}
+
+"""Defines the criteria for filtering results based on integer values."""
+input IntFilter {
+  """Filters results to only include those that match this exact integer."""
+  equals: Int
+
+  """
+  Filters results to only include those that are greater than the specified integer.
+  """
+  gt: Int
+
+  """
+  Filters results to only include those that are greater than or equal to the specified integer.
+  """
+  gte: Int
+
+  """
+  Filters results to only include those that match any of the specified integers.
+  """
+  in: [Int!]
+
+  """
+  Filters results to only include those that are less than the specified integer.
+  """
+  lt: Int
+
+  """
+  Filters results to only include those that are less than or equal to the specified integer.
+  """
+  lte: Int
+
+  """
+  Allows for nested integer filtering, applying additional filter criteria.
+  """
+  not: IntFilter
+
+  """
+  Filters results to exclude those that match any of the specified integers.
+  """
+  notIn: [Int!]
+}
+
 """
 A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
 """
@@ -169,6 +277,17 @@ input LoginInput {
 }
 
 type Mutation {
+  createRecurringTransaction(
+    """The data required to create a new recurring transaction."""
+    input: CreateRecurringTransactionInput!
+  ): RecurringTransaction!
+
+  """Create a new transaction within the application."""
+  createTransaction(
+    """The data required to create a new transaction."""
+    input: CreateTransactionInput!
+  ): Transaction!
+
   """Create a new user within the application."""
   createUser(
     """The data required to create a new user."""
@@ -180,6 +299,16 @@ type Mutation {
     """The data required to create a new wallet."""
     input: CreateWalletInput!
   ): Wallet
+  deleteRecurringTransaction(
+    """The ID of the recurring transaction to delete."""
+    id: Cuid!
+  ): RecurringTransaction!
+
+  """Delete an existing transaction within the application."""
+  deleteTransaction(
+    """The ID of the transaction to delete."""
+    id: Cuid!
+  ): Transaction!
 
   """
   Delete the current user within the application. Requires authentication.
@@ -208,6 +337,15 @@ type Mutation {
     refreshToken: JWT!
   ): Tokens
 
+  """Update an existing transaction within the application."""
+  updateTransaction(
+    """The ID of the transaction to update."""
+    id: Cuid!
+
+    """The data required to update an existing transaction."""
+    input: UpdateTransactionInput!
+  ): Transaction!
+
   """
   Update the current user within the application. Requires authentication.
   """
@@ -226,9 +364,60 @@ type Mutation {
   ): Wallet
 }
 
+"""
+Defines how null values should be handled during sorting: first (nulls first) or last (nulls last).
+"""
+enum NullsOrder {
+  first
+  last
+}
+
 type Query {
   """Get the current user within the application. Requires authentication."""
   me: User
+  recurringTransaction(
+    """The ID of the recurring transaction to retrieve."""
+    id: Cuid!
+  ): RecurringTransaction
+  recurringTransactions(
+    orderBy: [RecurringTransactionOrderByInput!]
+
+    """
+    The number of recurring transactions to skip before starting to collect the result set.
+    """
+    skip: Int
+
+    """
+    The number of recurring transactions to fetch. If not specified, all matcing recurring transactions will be fetched.
+    """
+    take: Int
+    where: RecurringTransactionWhereInput
+  ): RecurringTransactionPagination!
+
+  """Retrieve a single transaction within the application."""
+  transaction(
+    """The ID of the transaction to retrieve."""
+    id: Cuid!
+  ): Transaction
+
+  """Retrieve multiple transactions within the application."""
+  transactions(
+    """The order in which to sort the fetched transactions."""
+    orderBy: [TransactionOrderByInput!]
+
+    """
+    The number of transactions to skip before starting to collect the result set.
+    """
+    skip: Int
+
+    """
+    The number of transactions to fetch. If not specified, all matcing transactions will be fetched.
+    """
+    take: Int
+
+    """Filter criteria to determine which transactions to fetch."""
+    where: TransactionWhereInput
+  ): TransactionPagination
 
   """Retrieves a wallet by its ID of the authenticated user."""
   wallet(
@@ -264,10 +453,74 @@ enum QueryMode {
   insensitive
 }
 
+type RecurringTransaction {
+  amount: Float!
+  createdAt: DateTime!
+  dayOfMonth: Int
+  dayOfWeek: Int
+  frequency: Frequency!
+  id: Cuid!
+  month: Int
+  title: String!
+  type: TransactionType!
+  updatedAt: DateTime!
+  walletId: Cuid!
+}
+
+input RecurringTransactionOrderByInput {
+  amount: SortOrder
+  createdAt: SortOrder
+  dayOfMonth: SortOrderInput
+  dayOfWeek: SortOrderInput
+  frequency: SortOrder
+  id: SortOrder
+  month: SortOrderInput
+  title: SortOrder
+  type: SortOrder
+  updatedAt: SortOrder
+  walletId: SortOrder
+}
+
+"""
+The RecurringTransactionPagination object represents a paginated list of recurring transactions within the application.
+"""
+type RecurringTransactionPagination {
+  nodes: [RecurringTransaction!]!
+  totalCount: Int!
+}
+
+input RecurringTransactionWhereInput {
+  AND: [RecurringTransactionWhereInput!]
+  NOT: [RecurringTransactionWhereInput!]
+  OR: [RecurringTransactionWhereInput!]
+  amount: FloatFilter
+  createdAt: DateTimeFilter
+  dayOfMonth: IntFilter
+  dayOfWeek: IntFilter
+  frequency: EnumFrequencyFilter
+  id: StringFilter
+  month: IntFilter
+  title: StringFilter
+  type: EnumTransactionTypeFilter
+  updatedAt: DateTimeFilter
+  walletId: StringFilter
+}
+
 """Specifies the order of sorting: ascending (asc) or descending (desc)."""
 enum SortOrder {
   asc
   desc
+}
+
+"""Defines the criteria for sorting results based on string values."""
+input SortOrderInput {
+  """
+  Defines how null values should be handled during sorting: first (nulls first) or last (nulls last).
+  """
+  nulls: NullsOrder
+
+  """Specifies the order of sorting: ascending (asc) or descending (desc)."""
+  sort: SortOrder!
 }
 
 """Defines the criteria for filtering results based on string values."""
@@ -332,6 +585,161 @@ type Tokens {
 
   """The refresh token used to generate a new access token."""
   refreshToken: JWT!
+}
+
+"""
+The Transaction object represents a registered transaction within the application.
+"""
+type Transaction {
+  """
+  The amount of the transaction. This field represents the monetary value of the transaction.
+  """
+  amount: Float!
+
+  """
+  The creation timestamp of the transaction. This field records the exact date and time when the transaction was created.
+  """
+  createdAt: DateTime!
+
+  """
+  The date of the transaction. This field records the exact date when the transaction occurred.
+  """
+  date: DateTime!
+
+  """
+  The unique identifier (ID) of the transaction. This is a unique string assigned to each transaction upon creation and is used for transaction identification within the application.
+  """
+  id: Cuid!
+
+  """
+  The title of the transaction. This field is used to describe the purpose of the transaction.
+  """
+  title: String!
+
+  """
+  The type of the transaction. This field categorizes the transaction as either an income or an expense.
+  """
+  type: TransactionType!
+
+  """
+  The last update timestamp of the transaction. This field records the most recent date and time when the transaction's information was modified.
+  """
+  updatedAt: DateTime!
+
+  """
+  The unique identifier (ID) of the wallet associated with the transaction. This is a unique string assigned to each wallet upon creation and is used for wallet identification within the application.
+  """
+  walletId: Cuid!
+}
+
+input TransactionOrderByInput {
+  """The order in which to sort the fetched transactions by their amount."""
+  amount: SortOrder
+
+  """
+  The order in which to sort the fetched transactions by the date and time they were created.
+  """
+  createdAt: SortOrder
+
+  """The order in which to sort the fetched transactions by their date."""
+  date: SortOrder
+
+  """The direction in which to sort the fetched transactions."""
+  id: SortOrder
+
+  """The order in which to sort the fetched transactions by their title."""
+  title: SortOrder
+
+  """The order in which to sort the fetched transactions by their type."""
+  type: SortOrder
+
+  """
+  The order in which to sort the fetched transactions by the date and time they were last updated.
+  """
+  updatedAt: SortOrder
+}
+
+"""
+The TransactionPagination object represents a paginated list of transactions within the application.
+"""
+type TransactionPagination {
+  """
+  Retrieve a list of transactions within the application. This field returns an array of transactions based on the provided query arguments.
+  """
+  nodes: [Transaction!]!
+
+  """
+  Retrieve the total count of transactions within the application. This field returns the total number of transactions based on the provided query arguments.
+  """
+  totalCount: Int!
+}
+
+"""The transaction type that can be used within the application."""
+enum TransactionType {
+  EXPENSE
+  INCOME
+}
+
+"""
+The transaction where input object represents the criteria for filtering transactions.
+"""
+input TransactionWhereInput {
+  """
+  A list of conditions that must all be true (logical AND) for the transaction to be included in the results.
+  """
+  AND: [TransactionWhereInput!]
+
+  """
+  A list of conditions that must all be false (logical NOT) for the transaction to be included in the results.
+  """
+  NOT: [TransactionWhereInput!]
+
+  """
+  A list of conditions where at least one must be true (logical OR) for the transaction to be included in the results.
+  """
+  OR: [TransactionWhereInput!]
+
+  """A filter to apply to the transaction amount field."""
+  amount: FloatFilter
+
+  """
+  A filter to apply to the createdAt field, filtering by the date and time the transaction was created.
+  """
+  createdAt: DateTimeFilter
+
+  """A filter to apply to the transaction date field."""
+  date: DateTimeFilter
+
+  """A filter to apply to the transaction ID field."""
+  id: StringFilter
+
+  """A filter to apply to the transaction title field."""
+  title: StringFilter
+
+  """A filter to apply to the transaction type field."""
+  type: EnumTransactionTypeFilter
+
+  """
+  A filter to apply to the updatedAt field, filtering by the date and time the transaction was last updated.
+  """
+  updatedAt: DateTimeFilter
+
+  """A filter to apply to the wallet ID field."""
+  walletId: StringFilter
+}
+
+"""
+Defines the data required to update an existing transaction within the application.
+"""
+input UpdateTransactionInput {
+  """The amount of the transaction."""
+  amount: Float
+
+  """The date of the transaction."""
+  date: DateTime
+
+  """The title of the transaction."""
+  title: String
 }
 
 """
@@ -456,7 +864,7 @@ input WalletOrderByInput {
 }
 
 """
-Tge WalletPagination object represents a paginated list of wallets within the application.
+The WalletPagination object represents a paginated list of wallets within the application.
 """
 type WalletPagination {
   """

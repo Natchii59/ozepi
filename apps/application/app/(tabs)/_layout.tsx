@@ -13,7 +13,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name='index'
         options={{
-          title: 'Home',
+          title: 'Accueil',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'home' : 'home-outline'}
@@ -23,12 +23,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='about'
+        name='cagnotte'
         options={{
-          title: 'About',
+          title: 'Cagnotte',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
+              name={focused ? 'wallet' : 'wallet-outline'}
+              color={color}
+            />
+          )
+        }}
+      />
+      <Tabs.Screen
+        name='Parametre'
+        options={{
+          title: 'Parametre',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? 'cog' : 'cog-outline'}
               color={color}
             />
           )
