@@ -35,9 +35,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='Parametre'
+        name='Parametres'
         options={{
-          title: 'Parametre',
+          title: 'Parametres',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'cog' : 'cog-outline'}
