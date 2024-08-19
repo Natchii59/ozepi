@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Switch, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Switch, Button, StyleSheet } from 'react-native';
 
 export default function Parametres() {
   const [toggleOn, setToggleOn] = useState(true);
+
+
+  const handleLogout = () => {
+    // Logique de déconnexion
+    console.log('Déconnecté');
+  };
 
   return (
 
@@ -11,25 +17,22 @@ export default function Parametres() {
     <Text style={styles.pageTitle}>Paramètres</Text>
 
     <View style={styles.section}>
-      <Text style={styles.title}>None</Text>
+      <Text style={styles.title}>Nom</Text>
       <TextInput style={styles.input} placeholder="Text" />
     </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Chevron</Text>
+        <Text style={styles.title}>Prénom</Text>
         <TextInput style={styles.input} placeholder="Text" />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Select</Text>
-        <View style={styles.row}>
-          <TextInput style={styles.inputSmall} placeholder="Text" />
-          <TextInput style={styles.inputSmall} placeholder="Value" />
-        </View>
+        <Text style={styles.title}>Mail</Text>
+        <TextInput style={styles.input} placeholder="Text" />
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.title}>Toggle ON</Text>
+        <Text style={styles.title}>Dark mode</Text>
         <Switch
           value={toggleOn}
           onValueChange={() => setToggleOn(previousState => !previousState)}
@@ -38,36 +41,10 @@ export default function Parametres() {
         />
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.title}>Select</Text>
-        <View style={styles.row}>
-          <TextInput style={styles.inputSmall} placeholder="Text" />
-          <TextInput style={styles.inputSmall} placeholder="Value" />
-        </View>
-      </View>
+      
 
       <View style={styles.section}>
-        <Text style={styles.title}>Select</Text>
-        <View style={styles.row}>
-          <TextInput style={styles.inputSmall} placeholder="Text" />
-          <TextInput style={styles.inputSmall} placeholder="Value" />
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.title}>Select</Text>
-        <View style={styles.row}>
-          <TextInput style={styles.inputSmall} placeholder="Text" />
-          <TextInput style={styles.inputSmall} placeholder="Value" />
-        </View>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.title}>Select</Text>
-        <View style={styles.row}>
-          <TextInput style={styles.inputSmall} placeholder="Text" />
-          <TextInput style={styles.inputSmall} placeholder="Value" />
-        </View>
+        <Button title="Déconnexion" onPress={handleLogout} />
       </View>
     </View>
   );
